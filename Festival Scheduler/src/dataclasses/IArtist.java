@@ -19,7 +19,7 @@ public interface IArtist {
    * @return the name of the artist
    * @throws IllegalStateException if the name is not set
    */
-  public String getArtistName() throws IllegalStateException;
+  public String getName() throws IllegalStateException;
 
   /**
    * Returns the start time of the artist's set.
@@ -98,7 +98,7 @@ public interface IArtist {
    * @param name the name of the artist
    * @throws IllegalArgumentException if the name is null
    */
-  public void setArtistName(String name) throws IllegalArgumentException;
+  public void setName(String name) throws IllegalArgumentException;
 
   /**
    * Sets the start time of the artist's set.
@@ -151,11 +151,11 @@ public interface IArtist {
 
   /**
    * Sets the song of the artist with the given ID.
-   * @param id the ID of the song
+   * @param name the name of the song
    * @param song the song to be set
    * @throws IllegalArgumentException if the song with the given ID does not exist
    */
-  public void setSong(int id, Song song) throws IllegalArgumentException;
+  public void setSong(String name, Song song) throws IllegalArgumentException;
 
   /**
    * Sets the rating of the artist.
@@ -170,6 +170,16 @@ public interface IArtist {
    * @throws IllegalArgumentException if the override is null
    */
   public void setOverride(boolean override);
+
+  /**
+   * Returns whether the artist is playing during the given time.
+   * @param time the time to check
+   * @return whether the artist is playing during the given time
+   * @throws IllegalArgumentException if the time is not positive
+   * @throws IllegalStateException if the start time or end time is not set
+   */
+  public boolean isDuring(int time)
+          throws IllegalArgumentException, IllegalStateException;
 
   /**
    * Calculates the overall rating of the artist.

@@ -22,8 +22,8 @@ public class Song implements ISong {
     if (artist == null) {
       throw new IllegalArgumentException("Song artist cannot be null.");
     }
-    if (rating < 0 || rating > 10) {
-      throw new IllegalArgumentException("Song rating must be between 0 and 10.");
+    if (rating < 0 || rating > 5) {
+      throw new IllegalArgumentException("Song rating must be above 0 and 5.");
     }
     if (irlIndex < 0 || irlIndex > 5) {
       throw new IllegalArgumentException("Song IRL index must be between 0 and 5.");
@@ -45,11 +45,11 @@ public class Song implements ISong {
   }
 
   @Override
-  public String getSongName() throws IllegalStateException {
+  public String getName() throws IllegalStateException {
     if (this.name == null || this.name.equals("")) {
       throw new IllegalStateException("Song name is not set.");
     }
-    return null;
+    return this.name;
   }
 
   @Override
@@ -57,7 +57,7 @@ public class Song implements ISong {
     if (this.artist == null) {
       throw new IllegalStateException("Song artist is not set.");
     }
-    return null;
+    return this.artist;
   }
 
   @Override
@@ -65,7 +65,7 @@ public class Song implements ISong {
     if (this.artist == null) {
       throw new IllegalStateException("Song artist is not set.");
     }
-    return null;
+    return this.artist.getName();
   }
 
   @Override
@@ -73,7 +73,7 @@ public class Song implements ISong {
     if (this.rating == 0) {
       throw new IllegalStateException("Song rating is not set.");
     }
-    return 0;
+    return this.rating;
   }
 
   @Override
@@ -81,7 +81,7 @@ public class Song implements ISong {
     if (this.irlIndex == 0) {
       throw new IllegalStateException("Song IRL index is not set.");
     }
-    return 0;
+    return this.irlIndex;
   }
 
   @Override
@@ -126,9 +126,17 @@ public class Song implements ISong {
 
   @Override
   public double calculateOverallRating() throws IllegalStateException {
-    if (this.rating == 0 || this.irlIndex == 0) {
-      throw new IllegalStateException("Song rating or IRL index is not set.");
+    if (this.irlIndex == 0) {
+      throw new IllegalStateException("Song IRL index is not set.");
     }
-    return this.rating + this.irlIndex;
+    if (this.rating < 0 || this.rating > 5) {
+      throw new IllegalStateException("Song rating is invalid.");
+    }
+    return (this.rating + this.irlIndex) / 2;
+  }
+
+  @Override
+  public String toString() {
+    return this.name + " by " + this.artist.getName();
   }
 }

@@ -1,6 +1,8 @@
 package dataclasses;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents the general artist data class.
@@ -36,11 +38,13 @@ public class Artist implements IArtist {
     if (stage == null || stage.equals("")) {
       throw new IllegalArgumentException("Artist stage cannot be null or empty.");
     }
-    if (songList == null) {
-      throw new IllegalArgumentException("Artist song list cannot be null.");
+    if (songList == null || songList.size() == 0) {
+      this.songList = new ArrayList<>();
+    } else {
+      this.songList = songList;
     }
     if (irlIndex < 0 || irlIndex > 5) {
-      throw new IllegalArgumentException("Song IRL index must be between 0 and 5.");
+      throw new IllegalArgumentException("Artist IRL index must be between 0 and 5.");
     }
 
     this.name = name;
@@ -49,8 +53,8 @@ public class Artist implements IArtist {
     this.endTime = endTime;
     this.day = day;
     this.stage = stage;
-    this.songList = songList;
     this.irlIndex = irlIndex;
+    this.override = false;
   }
 
   @Override
@@ -62,7 +66,7 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public String getArtistName() throws IllegalStateException {
+  public String getName() throws IllegalStateException {
     if (this.name == null || this.name.equals("")) {
       throw new IllegalStateException("Artist name is not set.");
     }
@@ -128,7 +132,7 @@ public class Artist implements IArtist {
       throw new IllegalArgumentException("Artist song list is not set.");
     }
     for (Song song : this.songList) {
-      if (song.getSongName().equals(name)) {
+      if (song.getName().equals(name)) {
         return song;
       }
     }
@@ -157,7 +161,7 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public void setArtistName(String name) throws IllegalArgumentException {
+  public void setName(String name) throws IllegalArgumentException {
     if (name == null || name.equals("")) {
       throw new IllegalArgumentException("Artist name cannot be null or empty.");
     }
@@ -227,14 +231,14 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public void setSong(int id, Song song) throws IllegalArgumentException {
+  public void setSong(String name, Song song) throws IllegalArgumentException {
     if (this.songList == null) {
       throw new IllegalArgumentException("Artist song list is not set.");
     }
     for (Song song1 : this.songList) {
-      if (song1.getID() == id) {
-        this.songList.remove(song1);
-        this.songList.add(song);
+      if (Objects.equals(song1.getName(), name)) {
+        int index = this.songList.indexOf(song1);
+        this.songList.set(index, song);
         return;
       }
     }
@@ -255,12 +259,26 @@ public class Artist implements IArtist {
   }
 
   @Override
+  public boolean isDuring(int time) throws IllegalArgumentException, IllegalStateException {
+    if (time < 0) {
+      throw new IllegalArgumentException("Time cannot be negative.");
+    }
+    if (this.startTime == 0) {
+      throw new IllegalStateException("Artist start time is not set.");
+    }
+    if (this.endTime == 0) {
+      throw new IllegalStateException("Artist end time is not set.");
+    }
+    return time >= this.startTime && time <= this.endTime;
+  }
+
+  @Override
   public double calculateOverallRating() throws IllegalStateException {
     if (this.songList == null) {
       throw new IllegalStateException("Artist song list is not set.");
     }
-    if (this.irlIndex == 0) {
-      throw new IllegalStateException("Artist IRL index is not set.");
+    if (this.irlIndex > 5 || this.irlIndex < 0) {
+      throw new IllegalStateException("Artist IRL index invalid.");
     }
 
     double ratingSum = 0.0;
@@ -268,22 +286,25 @@ public class Artist implements IArtist {
       ratingSum += song.calculateOverallRating();
     }
 
-    return ratingSum / this.songList.size();
+    double songAvg = Math.round((ratingSum / this.songList.size()) * 100.0) / 100.0;
+    return Math.round(((songAvg + this.irlIndex) / 2) * 100.0) / 100.0;
   }
 
   @Override
   public String toString() throws IllegalStateException {
     String output = "";
-    output += "(" + this.getID() + ") " + this.getArtistName() + " (" + this.getStage() + "):\n";
+    output += "(" + this.getID() + ") " + this.getName() + "\n";
 
     for (Song song : this.getSongList()) {
-      output += song.getSongName() + ", ";
+      output += song.getName() + ", ";
     }
     output = output.substring(0, output.length() - 2);
     output += "\n";
 
-    output += "Performs on Day " + this.getDay()
-            + " from " + this.getStartTime() + " to " + this.getEndTime() + "\n";
+    output += "Day " + this.getDay()
+            + " from " + this.getStartTime() + " to " + this.getEndTime()
+            + "\n at " + this.getStage()
+            + "\n";
     output += "Overall Rating: " + this.calculateOverallRating();
 
     return output;

@@ -19,7 +19,7 @@ public interface ISong {
    * @return the name of the song
    * @throws IllegalStateException if the name is not set
    */
-  public String getSongName() throws IllegalStateException;
+  public String getName() throws IllegalStateException;
 
   /**
    * Returns the artist of the song.
@@ -99,4 +99,11 @@ public interface ISong {
    * @throws IllegalStateException if the rating or IRL index is not set
    */
   public double calculateOverallRating() throws IllegalStateException;
+
+  /**
+   * Returns a string representation of the song.
+   * @return a string representation of the song
+   * @throws IllegalStateException if the name, or artist is not set
+   */
+  public String toString() throws IllegalStateException;
 }
