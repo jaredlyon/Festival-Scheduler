@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import dataclasses.IFestival;
-import view.IView;
+import controller.IController;
 
 /**
  * Represents the general model for the application.
@@ -13,11 +13,11 @@ import view.IView;
 public interface IModel {
 
   /**
-   * Sets the view.
-   * @param view the view
-   * @throws IllegalArgumentException if the view is null
+   * Sets the controller.
+   * @param controller the controller
+   * @throws IllegalArgumentException if the controller is null
    */
-  public void setView(IView view) throws IllegalArgumentException;
+  public void setController(IController controller) throws IllegalArgumentException;
 
   /**
    * Returns the festival data.

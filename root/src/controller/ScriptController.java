@@ -111,4 +111,12 @@ public class ScriptController implements IController {
       throw new IllegalArgumentException("Controller cannot communicate with view.");
     }
   }
+
+  /**
+   * Sends a message to the view from the controller.
+   */
+  @Override
+  public void renderModelMessage(String message) throws IllegalArgumentException {
+    this.renderMessage(message);
+  }
 }

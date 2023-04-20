@@ -21,6 +21,7 @@ public final class Main {
     ScriptView view = new ScriptView(model);
     Readable in = new InputStreamReader(System.in);
     IController controller = new ScriptController(model, view, in);
+    model.setController(controller);
     controller.start();
   }
 }

@@ -10,7 +10,7 @@ import dataclasses.IDay;
 import dataclasses.IFestival;
 import dataclasses.ISong;
 import dataclasses.Song;
-import view.IView;
+import controller.IController;
 
 import java.io.*;
 import java.util.*;
@@ -20,24 +20,24 @@ import java.util.*;
  */
 public class Model implements IModel {
   private IFestival festival;
-  private IView view;
+  private IController controller;
 
-  public Model(IView view, IFestival festival) {
+  public Model(IController controller, IFestival festival) {
     Objects.requireNonNull(festival);
-    Objects.requireNonNull(view);
+    Objects.requireNonNull(controller);
     this.festival = festival;
-    this.view = view;
+    this.controller = controller;
   }
 
   public Model() {
     this.festival = null;
-    this.view = null;
+    this.controller = null;
   }
 
   @Override
-  public void setView(IView view) throws IllegalArgumentException {
-    Objects.requireNonNull(view);
-    this.view = view;
+  public void setController(IController controller) throws IllegalArgumentException {
+    Objects.requireNonNull(controller);
+    this.controller = controller;
   }
 
   @Override
@@ -285,10 +285,9 @@ public class Model implements IModel {
 
   @Override
   public void renderMessage(String message) throws IllegalStateException {
-    try {
-      this.view.renderMessage(message);
-    } catch (IOException e) {
-      throw new IllegalStateException("The model cannot communicate with the view.");
+    if (this.controller == null) {
+      throw new IllegalStateException("Controller is not set.");
     }
+    this.controller.renderModelMessage(message);
   }
 }

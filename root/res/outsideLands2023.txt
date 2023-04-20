@@ -1,0 +1,29 @@
+JL-FS-1.0
+festival OutsideLands 2023
+day 1 900 1130
+day 2 900 1130
+day 3 900 1130
+artist 1 1000 1030 Main_Stage 1 5.0 true
+artist-name Kendrick Lamar
+artist 2 1030 1100 Main_Stage 1 4.0 true
+artist-name Zedd
+artist 3 1100 1130 Main_Stage 1 3.0 false
+artist-name Janelle Monae
+artist 4 1000 1030 Main_Stage 2 2.0 false
+artist-name Foo Fighters
+artist 5 1030 1100 Main_Stage 2 4.0 false
+artist-name Lana Del Rey
+artist 6 1100 1130 Main_Stage 2 1.0 false
+artist-name Maggie Rogers
+artist 7 1000 1030 Main_Stage 3 5.0 true
+artist-name Odesza
+artist 8 1030 1100 Main_Stage 3 4.5 true
+artist-name The 1975
+artist 9 1100 1130 Main_Stage 3 4.5 true
+artist-name Megan Thee Stallion
+song 1 5.0 5.0
+song-name Family Ties (feat. Baby Keem)
+artist-name Kendrick Lamar
+song 2 4.0 5.0
+song-name The Middle (feat. Maren Morris)
+artist-name Zedd
