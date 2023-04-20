@@ -65,6 +65,21 @@ public class Festival implements IFestival {
   }
 
   @Override
+  public IArtist getArtistByName(String name) throws IllegalArgumentException {
+    if (name == null || name.equals("")) {
+      throw new IllegalArgumentException("Artist name cannot be null or empty.");
+    }
+
+    for (IArtist artist : this.artistList) {
+      if (artist.getName().equals(name)) {
+        return artist;
+      }
+    }
+
+    throw new IllegalArgumentException("Artist with the given name does not exist.");
+  }
+
+  @Override
   public List<ISong> getSongList() throws IllegalStateException {
     if (this.artistList == null) {
       throw new IllegalStateException("Festival artist list is not set.");

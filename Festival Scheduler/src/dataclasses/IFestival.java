@@ -29,6 +29,15 @@ public interface IFestival {
   public List<IArtist> getArtistList() throws IllegalStateException;
 
   /**
+   * Returns the artist of the festival by the given name.
+   * @param name the artist name
+   * @return the artist of the festival by the given name
+   * @throws IllegalStateException if the artist list is not set
+   */
+  public IArtist getArtistByName(String name) throws IllegalArgumentException;
+  // TODO: add test for this method
+
+  /**
    * Returns the list of songs of the festival.
    * @return the list of songs of the festival
    * @throws IllegalStateException if the song list is not set

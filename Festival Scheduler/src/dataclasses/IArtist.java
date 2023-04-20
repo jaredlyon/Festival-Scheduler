@@ -54,7 +54,7 @@ public interface IArtist {
    * @return the list of songs of the artist
    * @throws IllegalStateException if the song list is not set
    */
-  public List<Song> getSongList() throws IllegalStateException;
+  public List<ISong> getSongList() throws IllegalStateException;
 
   /**
    * Returns the song of the artist with the given ID.
@@ -62,7 +62,7 @@ public interface IArtist {
    * @return the song of the artist with the given ID
    * @throws IllegalArgumentException if the song with the given ID does not exist
    */
-  public Song getSongByID(int id) throws IllegalArgumentException;
+  public ISong getSongByID(int id) throws IllegalArgumentException;
 
   /**
    * Returns the song of the artist with the given name.
@@ -70,7 +70,7 @@ public interface IArtist {
    * @return the song of the artist with the given name
    * @throws IllegalArgumentException if the song with the given name does not exist
    */
-  public Song getSongByName(String name) throws IllegalArgumentException;
+  public ISong getSongByName(String name) throws IllegalArgumentException;
 
   /**
    * Returns the IRL index of the artist.
@@ -133,14 +133,14 @@ public interface IArtist {
    * @param songList the list of songs of the artist
    * @throws IllegalArgumentException if the song list is null
    */
-  public void setSongList(List<Song> songList) throws IllegalArgumentException;
+  public void setSongList(List<ISong> songList) throws IllegalArgumentException;
 
   /**
    * Adds a song to the artist's list of songs.
    * @param song the song to be added
    * @throws IllegalArgumentException if the song is null
    */
-  public void addSong(Song song) throws IllegalArgumentException;
+  public void addSong(ISong song) throws IllegalArgumentException;
 
   /**
    * Removes a song from the artist's list of songs.
@@ -155,7 +155,7 @@ public interface IArtist {
    * @param song the song to be set
    * @throws IllegalArgumentException if the song with the given ID does not exist
    */
-  public void setSong(String name, Song song) throws IllegalArgumentException;
+  public void setSong(String name, ISong song) throws IllegalArgumentException;
 
   /**
    * Sets the rating of the artist.

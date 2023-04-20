@@ -14,12 +14,12 @@ public class Artist implements IArtist {
   private int endTime;
   private int day;
   private String stage;
-  private List<Song> songList;
+  private List<ISong> songList;
   private double irlIndex;
   private boolean override;
 
   public Artist(String name, int id, int startTime, int endTime, int day, String stage,
-                List<Song> songList, double irlIndex) throws IllegalArgumentException {
+                List<ISong> songList, double irlIndex) throws IllegalArgumentException {
     if (name == null || name.equals("")) {
       throw new IllegalArgumentException("Artist name cannot be null or empty.");
     }
@@ -55,6 +55,52 @@ public class Artist implements IArtist {
     this.stage = stage;
     this.irlIndex = irlIndex;
     this.override = false;
+  }
+
+  public Artist(int id, String name, int startTime, int endTime,
+                String stage, int day,
+                double irlIndex, String override) throws IllegalArgumentException {
+    if (name == null || name.equals("")) {
+      throw new IllegalArgumentException("Artist name cannot be null or empty.");
+    }
+    if (id < 0) {
+      throw new IllegalArgumentException("Artist ID cannot be negative.");
+    }
+    if (startTime < 0) {
+      throw new IllegalArgumentException("Artist start time cannot be negative.");
+    }
+    if (endTime < 0) {
+      throw new IllegalArgumentException("Artist end time cannot be negative.");
+    }
+    if (day < 0) {
+      throw new IllegalArgumentException("Artist day cannot be negative.");
+    }
+    if (stage == null || stage.equals("")) {
+      throw new IllegalArgumentException("Artist stage cannot be null or empty.");
+    }
+    if (irlIndex < 0 || irlIndex > 5) {
+      throw new IllegalArgumentException("Artist IRL index must be between 0 and 5.");
+    }
+    if (override == null || override.equals("")) {
+      throw new IllegalArgumentException("Artist override cannot be null or empty.");
+    } else {
+      if (override.equals("true")) {
+        this.override = true;
+      } else if (override.equals("false")) {
+        this.override = false;
+      } else {
+        throw new IllegalArgumentException("Artist override must be true or false.");
+      }
+    }
+
+    this.name = name;
+    this.id = id;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.day = day;
+    this.stage = stage;
+    this.irlIndex = irlIndex;
+    this.songList = new ArrayList<>();
   }
 
   @Override
@@ -106,7 +152,7 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public List<Song> getSongList() throws IllegalStateException {
+  public List<ISong> getSongList() throws IllegalStateException {
     if (this.songList == null) {
       throw new IllegalStateException("Artist song list is not set.");
     }
@@ -114,11 +160,11 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public Song getSongByID(int id) throws IllegalArgumentException {
+  public ISong getSongByID(int id) throws IllegalArgumentException {
     if (this.songList == null) {
       throw new IllegalArgumentException("Artist song list is not set.");
     }
-    for (Song song : this.songList) {
+    for (ISong song : this.songList) {
       if (song.getID() == id) {
         return song;
       }
@@ -127,11 +173,11 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public Song getSongByName(String name) throws IllegalArgumentException {
+  public ISong getSongByName(String name) throws IllegalArgumentException {
     if (this.songList == null) {
       throw new IllegalArgumentException("Artist song list is not set.");
     }
-    for (Song song : this.songList) {
+    for (ISong song : this.songList) {
       if (song.getName().equals(name)) {
         return song;
       }
@@ -201,7 +247,7 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public void setSongList(List<Song> songList) throws IllegalArgumentException {
+  public void setSongList(List<ISong> songList) throws IllegalArgumentException {
     if (songList == null) {
       throw new IllegalArgumentException("Artist song list cannot be null.");
     }
@@ -209,7 +255,7 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public void addSong(Song song) throws IllegalArgumentException {
+  public void addSong(ISong song) throws IllegalArgumentException {
     if (song == null) {
       throw new IllegalArgumentException("Song cannot be null.");
     }
@@ -221,7 +267,7 @@ public class Artist implements IArtist {
     if (this.songList == null) {
       throw new IllegalArgumentException("Artist song list is not set.");
     }
-    for (Song song : this.songList) {
+    for (ISong song : this.songList) {
       if (song.getID() == id) {
         this.songList.remove(song);
         return;
@@ -231,11 +277,11 @@ public class Artist implements IArtist {
   }
 
   @Override
-  public void setSong(String name, Song song) throws IllegalArgumentException {
+  public void setSong(String name, ISong song) throws IllegalArgumentException {
     if (this.songList == null) {
       throw new IllegalArgumentException("Artist song list is not set.");
     }
-    for (Song song1 : this.songList) {
+    for (ISong song1 : this.songList) {
       if (Objects.equals(song1.getName(), name)) {
         int index = this.songList.indexOf(song1);
         this.songList.set(index, song);
@@ -282,7 +328,7 @@ public class Artist implements IArtist {
     }
 
     double ratingSum = 0.0;
-    for (Song song : this.songList) {
+    for (ISong song : this.songList) {
       ratingSum += song.calculateOverallRating();
     }
 
@@ -295,7 +341,7 @@ public class Artist implements IArtist {
     String output = "";
     output += "(" + this.getID() + ") " + this.getName() + "\n";
 
-    for (Song song : this.getSongList()) {
+    for (ISong song : this.getSongList()) {
       output += song.getName() + ", ";
     }
     output = output.substring(0, output.length() - 2);

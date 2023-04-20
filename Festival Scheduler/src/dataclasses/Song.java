@@ -36,6 +36,31 @@ public class Song implements ISong {
     this.irlIndex = irlIndex;
   }
 
+  public Song(int id, String name, IArtist artist, double rating, double irlIndex)
+          throws IllegalArgumentException {
+    if (name == null || name.equals("")) {
+      throw new IllegalArgumentException("Song name cannot be null or empty.");
+    }
+    if (id < 0) {
+      throw new IllegalArgumentException("Song ID cannot be negative.");
+    }
+    if (artist == null) {
+      throw new IllegalArgumentException("Song artist cannot be null.");
+    }
+    if (rating < 0 || rating > 5) {
+      throw new IllegalArgumentException("Song rating must be above 0 and 5.");
+    }
+    if (irlIndex < 0 || irlIndex > 5) {
+      throw new IllegalArgumentException("Song IRL index must be between 0 and 5.");
+    }
+
+    this.name = name;
+    this.id = id;
+    this.artist = artist;
+    this.rating = rating;
+    this.irlIndex = irlIndex;
+  }
+
   @Override
   public int getID() throws IllegalStateException {
     if (this.id == 0) {
