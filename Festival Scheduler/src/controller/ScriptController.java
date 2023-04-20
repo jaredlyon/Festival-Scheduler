@@ -59,6 +59,7 @@ public class ScriptController implements IController {
     this.renderMessage("""
             Welcome to the Festival Scheduler!
             This program uses JL-FS-1.0 .txt files to predict your festival schedule.
+            github.com/jaredlyon/festival-scheduler
             Type "help" for a list of commands.
             """);
 
