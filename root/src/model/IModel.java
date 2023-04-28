@@ -1,6 +1,5 @@
 package model;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import dataclasses.IFestival;
@@ -59,14 +58,14 @@ public interface IModel {
    * @param filename the name of the TXT file
    * @throws IllegalArgumentException if the filename is null or empty
    */
-  public void exportDataTxt(String filename) throws IllegalArgumentException;
+  public void exportDataTxt(String filename) throws IllegalArgumentException, IOException;
 
   /**
    * Generates a schedule for the festival.
-   * @return the schedule
+   *
    * @throws IllegalStateException if the festival data is not set
    */
-  public String generateSchedule() throws IllegalStateException;
+  public void generateSchedule() throws IllegalStateException;
 
   /**
    * Passes a message to the view for display.

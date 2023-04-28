@@ -21,17 +21,20 @@ import java.util.*;
 public class Model implements IModel {
   private IFestival festival;
   private IController controller;
+  private String schedule;
 
   public Model(IController controller, IFestival festival) {
     Objects.requireNonNull(festival);
     Objects.requireNonNull(controller);
     this.festival = festival;
     this.controller = controller;
+    this.schedule = "Schedule has not been generated.";
   }
 
   public Model() {
     this.festival = null;
     this.controller = null;
+    this.schedule = "Schedule has not been generated.";
   }
 
   @Override
@@ -235,7 +238,7 @@ public class Model implements IModel {
       this.renderMessage("Added day " + id);
 
       double progress = ((double) currentLine / (double) lines) * 100;
-      this.renderMessage("Progress: " + progress + "%");
+      this.renderMessage("Progress: " + Math.round(progress) + "%");
 
       try {
         this.parseDataFromImport(data, lines, currentLine + 1);
@@ -246,8 +249,28 @@ public class Model implements IModel {
   }
 
   @Override
-  public void exportDataTxt(String filename) throws IllegalArgumentException {
+  public void exportDataTxt(String filename) throws IllegalArgumentException, IOException {
+    if (filename == null) {
+      throw new IllegalArgumentException("Filename cannot be null.");
+    }
 
+    if (filename.equals("")) {
+      throw new IllegalArgumentException("Filename cannot be empty.");
+    }
+
+    if (!filename.endsWith(".txt")) {
+      throw new IllegalArgumentException("Filename must end with .txt");
+    }
+
+    try {
+      File file = new File(filename);
+      FileWriter fileWriter = new FileWriter(file);
+      StringBuilder data = this.parseDataForExport();
+      fileWriter.write(data.toString());
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IOException("Error writing to file.");
+    }
   }
 
   private StringBuilder parseDataForExport() {
@@ -259,28 +282,60 @@ public class Model implements IModel {
      * day id start-time end-time
      * day id start-time end-time
      * ...
-     * artist id artist-name start-time end-time stage-name day-num IRL-index override-value
-     * artist id artist-name start-time end-time stage-name day-num IRL-index override-value
+     * artist id start-time end-time stage-name day-num IRL-index override-value
+     * artist-name name
+     * artist id start-time end-time stage-name day-num IRL-index override-value
+     * artist-name name
      * ...
-     * song id song-name artist-name rating IRL-index
-     * song id song-name artist-name rating IRL-index
+     * song id rating IRL-index
+     * song-name name
+     * artist-name name
+     * song id rating IRL-index
+     * song-name name
+     * artist-name name
      * ...
      */
+
 
     StringBuilder data = new StringBuilder();
     data.append("JL-FS-1.0\n");
     data.append("festival " + this.festival.getName() + "\n");
 
+    // get data
+    List<IDay> dayList = this.festival.getDayList();
+    List<IArtist> artistList = this.festival.getArtistList();
+    List<ISong> songList = this.festival.getSongList();
+
+    // add days
+    for (IDay day : dayList) {
+      data.append("day " + day.getID() + " " + day.getStartTime() + " " + day.getEndTime() + "\n");
+    }
+
+    // add artists
+    for (IArtist artist : artistList) {
+      data.append("artist " + artist.getID() + " " + artist.getStartTime() + " " + artist.getEndTime() + " " +
+              artist.getStage() + " " + artist.getDay() + " " + artist.getIRLIndex() +
+              " " + artist.getOverride() + "\n");
+      data.append("artist-name " + artist.getName() + "\n");
+    }
+
+    // add songs
+    for (ISong song : songList) {
+      data.append("song " + song.getID() + " " + song.getRating() + " " + song.getIRLIndex() + "\n");
+      data.append("song-name " + song.getName() + "\n");
+      data.append("artist-name " + song.getArtist().getName() + "\n");
+    }
+
     return data;
   }
 
   @Override
-  public String generateSchedule() throws IllegalStateException {
+  public void generateSchedule() throws IllegalStateException {
     if (this.festival == null) {
       throw new IllegalStateException("Festival data is not set.");
     }
 
-    return this.festival.generateSchedule();
+    this.schedule = this.festival.generateSchedule();
   }
 
   @Override
